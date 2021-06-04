@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31105.61
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomObjectComparer", "CustomObjectComparer\CustomObjectComparer.csproj", "{434D1F43-D92C-415B-A3DD-DC07240B3B01}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomObjectComparerTests", "CustomObjectComparerTests\CustomObjectComparerTests.csproj", "{442248D5-9FE5-4EDB-A441-B096BF07854C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{434D1F43-D92C-415B-A3DD-DC07240B3B01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{434D1F43-D92C-415B-A3DD-DC07240B3B01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{434D1F43-D92C-415B-A3DD-DC07240B3B01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{434D1F43-D92C-415B-A3DD-DC07240B3B01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{442248D5-9FE5-4EDB-A441-B096BF07854C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{442248D5-9FE5-4EDB-A441-B096BF07854C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{442248D5-9FE5-4EDB-A441-B096BF07854C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{442248D5-9FE5-4EDB-A441-B096BF07854C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E9E0689C-B511-4B27-B978-ED4E82D9641E}
+	EndGlobalSection
+EndGlobal
