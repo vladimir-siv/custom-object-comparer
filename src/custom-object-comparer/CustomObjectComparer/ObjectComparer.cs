@@ -5,6 +5,9 @@ using System.Reflection;
 
 namespace CustomObjectComparer
 {
+	/// <summary>
+	/// Represents a generic object by-value deep comparer.
+	/// </summary>
 	public class ObjectComparer
 	{
 		/// <summary>
