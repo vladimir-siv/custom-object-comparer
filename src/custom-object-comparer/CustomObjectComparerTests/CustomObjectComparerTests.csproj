@@ -50,10 +50,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ComparisonTests.cs" />
+    <Compile Include="Models\Address.cs" />
+    <Compile Include="Models\City.cs" />
+    <Compile Include="Models\Client.cs" />
+    <Compile Include="Models\Country.cs" />
+    <Compile Include="Models\Phone.cs" />
+    <Compile Include="Models\Title.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CustomObjectComparer\CustomObjectComparer.csproj">
+      <Project>{434d1f43-d92c-415b-a3dd-dc07240b3b01}</Project>
+      <Name>CustomObjectComparer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
