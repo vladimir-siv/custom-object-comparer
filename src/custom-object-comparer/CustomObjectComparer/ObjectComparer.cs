@@ -36,8 +36,6 @@ namespace CustomObjectComparer
 		/// <returns>Differences between the objects.</returns>
 		private IEnumerable<ObjectDifference> DeepCompare_Algorithm(object obj1, object obj2)
 		{
-			// Assumes obj1.GetType() == obj2.GetType()
-
 			// Comparison types:
 			//  1) Objects
 			//		a) Primitive Types
@@ -47,6 +45,18 @@ namespace CustomObjectComparer
 			if (obj1 != null && obj2 != null)
 			{
 				Type objectType = obj1.GetType();
+
+				if (objectType != obj2.GetType())
+				{
+					yield return new ObjectDifference
+					(
+						obj1,
+						obj2,
+						DifferenceType.TypeMismatch
+					);
+
+					yield break;
+				}
 
 				if (objectType.IsPrimitive || objectType == typeof(string))
 				{
@@ -92,6 +102,18 @@ namespace CustomObjectComparer
 
 				Type objectType = obj1.GetType();
 
+				if (objectType != obj2.GetType())
+				{
+					yield return new ObjectDifference
+					(
+						obj1,
+						obj2,
+						DifferenceType.TypeMismatch
+					);
+
+					continue;
+				}
+
 				if (objectType.IsEnumerable())
 				{
 					// Possible order insensitive comparison
@@ -125,6 +147,18 @@ namespace CustomObjectComparer
 
 						Type elementType = e1obj.GetType();
 
+						if (elementType != e2obj.GetType())
+						{
+							yield return new ObjectDifference
+							(
+								e1obj,
+								e2obj,
+								DifferenceType.TypeMismatch
+							);
+
+							continue;
+						}
+
 						if (elementType.IsPrimitive || elementType == typeof(string))
 						{
 							if (!e1obj.Equals(e2obj))
@@ -152,6 +186,19 @@ namespace CustomObjectComparer
 
 						Type memberType = val1.GetType();
 
+						if (memberType != val2.GetType())
+						{
+							yield return new ObjectDifference
+							(
+								obj1,
+								obj2,
+								DifferenceType.TypeMismatch,
+								member
+							);
+
+							continue;
+						}
+
 						if (memberType.IsPrimitive || memberType == typeof(string))
 						{
 							if (!val1.Equals(val2))
@@ -176,18 +223,13 @@ namespace CustomObjectComparer
 
 		/// <summary>
 		/// Executes a deep generic comparison between two objects and yields information
-		/// about differences as it finds any. The objects must be of the same type.
+		/// about differences as it finds any.
 		/// </summary>
 		/// <param name="obj1">First object.</param>
 		/// <param name="obj2">Second object.</param>
 		/// <returns>Enumeration of differences between the objects.</returns>
 		public IEnumerable<ObjectDifference> DeepCompare(object obj1, object obj2)
 		{
-			if (obj1?.GetType() != obj2?.GetType())
-			{
-				throw new InvalidOperationException("DeepCompare requires both arguments to be of the same type.");
-			}
-
 			return DeepCompare_Algorithm(obj1, obj2);
 		}
 

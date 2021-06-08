@@ -8,6 +8,7 @@ namespace CustomObjectComparer
 	public enum DifferenceType
 	{
 		NullReference,
+		TypeMismatch,
 		EnumerationSizeMismatch,
 		ValueMismatch,
 		ElementValueMismatch
@@ -34,7 +35,7 @@ namespace CustomObjectComparer
 		public DifferenceType DifferenceType { get; }
 
 		/// <summary>
-		/// If the difference is a ValueMismatch upon a certain member, holds the information about the member.
+		/// When not null, holds the information about the member which is different within <see cref="Obj1"/> and <see cref="Obj2"/>.
 		/// </summary>
 		public MemberInfo Member { get; }
 
