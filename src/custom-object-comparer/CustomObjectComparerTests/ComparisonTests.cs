@@ -10,6 +10,8 @@ namespace CustomObjectComparerTests
 	[TestClass]
 	public class ComparisonTests
 	{
+		#region Models
+
 		private Country Serbia;
 		private Country Serbia_2;
 		private Country England;
@@ -22,16 +24,18 @@ namespace CustomObjectComparerTests
 		private City London;
 		private City London_2;
 		
-		private Address RadeTrnica137;
-		private Address RadeTrnica137_2;
-		private Address RadeTrnica139;
-		private Address BulevarKraljaAleksandra176;
-		private Address BulevarKraljaAleksandra176_2;
+		private Address Svetosavska55;
+		private Address Svetosavska55_2;
+		private Address BraceTatica60;
+		private Address BulevarKraljaAleksandra73;
+		private Address BulevarKraljaAleksandra73_2;
 		private Address Wallstreet78;
 		private Address Wallstreet78_2;
 
-		private Client VladimirSivcev;
-		private Client VladimirSivcev_2;
+		private Client JohnDoe;
+		private Client JohnDoe_2;
+
+		#endregion
 
 		[TestInitialize]
 		public void Setup()
@@ -112,43 +116,43 @@ namespace CustomObjectComparerTests
 
 			#region Addresses
 
-			RadeTrnica137 = new Address
+			Svetosavska55 = new Address
 			{
 				ID = 1,
-				Street = "Rade Trnica",
-				Number = 137,
+				Street = "Svetosavska",
+				Number = 55,
 				City = Kikinda
 			};
 
-			RadeTrnica137_2 = new Address
+			Svetosavska55_2 = new Address
 			{
 				ID = 1,
-				Street = "Rade Trnica",
-				Number = 137,
+				Street = "Svetosavska",
+				Number = 55,
 				City = Kikinda_2
 			};
 
-			RadeTrnica139 = new Address
+			BraceTatica60 = new Address
 			{
 				ID = 2,
-				Street = "Rade Trnica",
-				Number = 139,
+				Street = "Brace Tatica",
+				Number = 60,
 				City = Kikinda
 			};
 
-			BulevarKraljaAleksandra176 = new Address
+			BulevarKraljaAleksandra73 = new Address
 			{
 				ID = 5,
 				Street = "Bulevar Kralja Aleksandra",
-				Number = 176,
+				Number = 73,
 				City = Belgrade
 			};
 
-			BulevarKraljaAleksandra176_2 = new Address
+			BulevarKraljaAleksandra73_2 = new Address
 			{
 				ID = 5,
 				Street = "Bulevar Kralja Aleksandra",
-				Number = 176,
+				Number = 73,
 				City = Belgrade_2
 			};
 
@@ -172,7 +176,7 @@ namespace CustomObjectComparerTests
 
 			#region Clients
 
-			VladimirSivcev = new Client
+			JohnDoe = new Client
 			(
 				new int[]
 				{
@@ -190,15 +194,15 @@ namespace CustomObjectComparerTests
 			)
 			{
 				ID = 1,
-				FirstName = "Vladimir",
-				LastName = "Sivčev",
-				Email = "vladimir.sivcev@gmail.com",
+				FirstName = "John",
+				LastName = "Doe",
+				Email = "john.doe@gmail.com",
 				Rank = 47.32,
 
 				PrimaryPhone = new Phone
 				{
 					CountryCode = "RS",
-					Number = "069/42-41-506"
+					Number = "061/11-22-333"
 				},
 				AlternativePhones = new List<Phone>(3)
 				{
@@ -243,16 +247,16 @@ namespace CustomObjectComparerTests
 					}
 				},
 
-				PrimaryAddress = RadeTrnica137,
+				PrimaryAddress = Svetosavska55,
 				AlternativeAddresses = new List<Address>(3)
 				{
-					RadeTrnica139,
-					BulevarKraljaAleksandra176,
+					BraceTatica60,
+					BulevarKraljaAleksandra73,
 					Wallstreet78
 				}
 			};
 
-			VladimirSivcev_2 = new Client
+			JohnDoe_2 = new Client
 			(
 				new int[]
 				{
@@ -270,15 +274,15 @@ namespace CustomObjectComparerTests
 			)
 			{
 				ID = 1,
-				FirstName = "Vladimir",
-				LastName = "Sivčev",
-				Email = "vladimir.sivcev@gmail.com",
+				FirstName = "John",
+				LastName = "Doe",
+				Email = "john.doe@gmail.com",
 				Rank = 47.32,
 
 				PrimaryPhone = new Phone
 				{
 					CountryCode = "RS",
-					Number = "069/42-41-506"
+					Number = "061/11-22-333"
 				},
 				AlternativePhones = new List<Phone>(3)
 				{
@@ -323,11 +327,11 @@ namespace CustomObjectComparerTests
 					}
 				},
 
-				PrimaryAddress = RadeTrnica137_2,
+				PrimaryAddress = Svetosavska55_2,
 				AlternativeAddresses = new List<Address>(3)
 				{
-					RadeTrnica139,
-					BulevarKraljaAleksandra176_2,
+					BraceTatica60,
+					BulevarKraljaAleksandra73_2,
 					Wallstreet78_2
 				}
 			};
@@ -339,7 +343,7 @@ namespace CustomObjectComparerTests
 		public void ComparisonTest_WhenObjectsAreSame_ShouldReturnWithZeroDifferences()
 		{
 			// Act
-			var differences = ObjectComparer.Default.DeepCompare(VladimirSivcev, VladimirSivcev_2);
+			var differences = ObjectComparer.Default.DeepCompare(JohnDoe, JohnDoe_2);
 
 			// Assert
 			Assert.AreEqual(0, differences.Count());
@@ -349,15 +353,15 @@ namespace CustomObjectComparerTests
 		public void ComparisonTest_WhenPropertyValueIsChanged_ShouldReturnWithValueMismatchDifference()
 		{
 			// Arrange
-			VladimirSivcev_2.PrimaryTitle.Name = "Intentional change";
+			JohnDoe_2.PrimaryTitle.Name = "Intentional change";
 
 			// Act
-			var differences = ObjectComparer.Default.DeepCompare(VladimirSivcev, VladimirSivcev_2);
+			var differences = ObjectComparer.Default.DeepCompare(JohnDoe, JohnDoe_2);
 
 			// Assert
 			Assert.AreEqual(1, differences.Count());
-			Assert.AreEqual(VladimirSivcev.PrimaryTitle, differences.First().Obj1);
-			Assert.AreEqual(VladimirSivcev_2.PrimaryTitle, differences.First().Obj2);
+			Assert.AreEqual(JohnDoe.PrimaryTitle, differences.First().Obj1);
+			Assert.AreEqual(JohnDoe_2.PrimaryTitle, differences.First().Obj2);
 			Assert.AreEqual(DifferenceType.ValueMismatch, differences.First().DifferenceType);
 			Assert.AreEqual("<Name>k__BackingField", differences.First().Member.Name);
 		}
@@ -366,16 +370,16 @@ namespace CustomObjectComparerTests
 		public void ComparisonTest_WhenArrayElementIsMissing_ShouldReturnWithEnumerationSizeMismatch()
 		{
 			// Arrange
-			List<Phone> alternativePhones = (List<Phone>)VladimirSivcev_2.AlternativePhones;
+			List<Phone> alternativePhones = (List<Phone>)JohnDoe_2.AlternativePhones;
 			alternativePhones.RemoveAt(2);
 
 			// Act
-			var differences = ObjectComparer.Default.DeepCompare(VladimirSivcev, VladimirSivcev_2);
+			var differences = ObjectComparer.Default.DeepCompare(JohnDoe, JohnDoe_2);
 
 			// Assert
 			Assert.AreEqual(1, differences.Count());
-			Assert.AreEqual(VladimirSivcev.AlternativePhones, differences.First().Obj1);
-			Assert.AreEqual(VladimirSivcev_2.AlternativePhones, differences.First().Obj2);
+			Assert.AreEqual(JohnDoe.AlternativePhones, differences.First().Obj1);
+			Assert.AreEqual(JohnDoe_2.AlternativePhones, differences.First().Obj2);
 			Assert.AreEqual(DifferenceType.EnumerationSizeMismatch, differences.First().DifferenceType);
 			Assert.IsNull(differences.First().Member);
 		}
@@ -384,15 +388,15 @@ namespace CustomObjectComparerTests
 		public void ComparisonTest_WhenSubReferentObjectIsChanged_ShouldReturnWithValueMismatchDifference()
 		{
 			// Arrange
-			RadeTrnica137_2.Street = "Intentional change";
+			Svetosavska55_2.Street = "Intentional change";
 			
 			// Act
-			var differences = ObjectComparer.Default.DeepCompare(VladimirSivcev, VladimirSivcev_2);
+			var differences = ObjectComparer.Default.DeepCompare(JohnDoe, JohnDoe_2);
 
 			// Assert
 			Assert.AreEqual(1, differences.Count());
-			Assert.AreEqual(VladimirSivcev.PrimaryAddress, differences.First().Obj1);
-			Assert.AreEqual(VladimirSivcev_2.PrimaryAddress, differences.First().Obj2);
+			Assert.AreEqual(JohnDoe.PrimaryAddress, differences.First().Obj1);
+			Assert.AreEqual(JohnDoe_2.PrimaryAddress, differences.First().Obj2);
 			Assert.AreEqual(DifferenceType.ValueMismatch, differences.First().DifferenceType);
 			Assert.AreEqual("<Street>k__BackingField", differences.First().Member.Name);
 		}
@@ -404,7 +408,7 @@ namespace CustomObjectComparerTests
 			Serbia_2.Name = "Intentional change";
 
 			// Act
-			var differences = ObjectComparer.Default.DeepCompare(VladimirSivcev, VladimirSivcev_2);
+			var differences = ObjectComparer.Default.DeepCompare(JohnDoe, JohnDoe_2);
 
 			// Assert
 			Assert.AreEqual(1, differences.Count());
@@ -418,17 +422,17 @@ namespace CustomObjectComparerTests
 		public void ComparisonTest_WhenMultipleSubReferentObjectsAreChanged_ShouldReturnWithValueMismatchDifferenceForEachChange()
 		{
 			// Arrange
-			RadeTrnica137_2.Street = "Intentional change";
+			Svetosavska55_2.Street = "Intentional change";
 			Serbia_2.Name = "Intentional change";
 
 			// Act
-			var differences = ObjectComparer.Default.DeepCompare(VladimirSivcev, VladimirSivcev_2);
+			var differences = ObjectComparer.Default.DeepCompare(JohnDoe, JohnDoe_2);
 
 			// Assert
 			Assert.AreEqual(2, differences.Count());
 
-			Assert.AreEqual(VladimirSivcev.PrimaryAddress, differences.First().Obj1);
-			Assert.AreEqual(VladimirSivcev_2.PrimaryAddress, differences.First().Obj2);
+			Assert.AreEqual(JohnDoe.PrimaryAddress, differences.First().Obj1);
+			Assert.AreEqual(JohnDoe_2.PrimaryAddress, differences.First().Obj2);
 			Assert.AreEqual(DifferenceType.ValueMismatch, differences.First().DifferenceType);
 			Assert.AreEqual("<Street>k__BackingField", differences.First().Member.Name);
 
@@ -442,17 +446,17 @@ namespace CustomObjectComparerTests
 		public void ComparisonTest_WhenDictionaryPrivateFieldIsChanged_ShouldReturnEnumerationSizeMismatch()
 		{
 			// Arrange
-			Dictionary<int, int> privateDict_2 = VladimirSivcev_2.GetPrivateDict();
+			Dictionary<int, int> privateDict_2 = JohnDoe_2.GetPrivateDict();
 			privateDict_2.Add(-15, 2);
 
 			// Act
-			var differences = ObjectComparer.Default.DeepCompare(VladimirSivcev, VladimirSivcev_2);
+			var differences = ObjectComparer.Default.DeepCompare(JohnDoe, JohnDoe_2);
 
 			// Assert
 			Assert.AreEqual(1, differences.Count());
 
-			Assert.AreEqual(VladimirSivcev.GetPrivateDict(), differences.First().Obj1);
-			Assert.AreEqual(VladimirSivcev_2.GetPrivateDict(), differences.First().Obj2);
+			Assert.AreEqual(JohnDoe.GetPrivateDict(), differences.First().Obj1);
+			Assert.AreEqual(JohnDoe_2.GetPrivateDict(), differences.First().Obj2);
 			Assert.AreEqual(DifferenceType.EnumerationSizeMismatch, differences.First().DifferenceType);
 			Assert.IsNull(differences.First().Member);
 		}
