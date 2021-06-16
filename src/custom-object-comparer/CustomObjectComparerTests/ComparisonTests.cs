@@ -420,6 +420,16 @@ namespace CustomObjectComparerTests
 		}
 
 		[TestMethod]
+		public void ComparisonTest_WhenBothObjectsAreNull_ShouldReturnWithZeroDifferences()
+		{
+			// Act
+			var differences = ObjectComparer.Default.DeepCompare(null, null);
+
+			// Assert
+			Assert.AreEqual(0, differences.Count());
+		}
+
+		[TestMethod]
 		public void ComparisonTest_WhenPropertyValueIsSetToNull_ShouldReturnWithNullReferenceDifference()
 		{
 			// Arrange
@@ -434,6 +444,20 @@ namespace CustomObjectComparerTests
 			Assert.AreEqual(JohnDoe_2, differences.First().Obj2);
 			Assert.AreEqual(DifferenceType.NullReference, differences.First().DifferenceType);
 			Assert.AreEqual("<PrimaryTitle>k__BackingField", differences.First().Member.Name);
+		}
+
+		[TestMethod]
+		public void ComparisonTest_WhenPropertyValueIsSetToNullForBoth_ShouldReturnWithZeroDifferences()
+		{
+			// Arrange
+			JohnDoe.PrimaryTitle = null;
+			JohnDoe_2.PrimaryTitle = null;
+
+			// Act
+			var differences = ObjectComparer.Default.DeepCompare(JohnDoe, JohnDoe_2);
+
+			// Assert
+			Assert.AreEqual(0, differences.Count());
 		}
 
 		[TestMethod]
@@ -454,6 +478,23 @@ namespace CustomObjectComparerTests
 			Assert.AreEqual(alternativeTitles_2[1], differences.Last().Obj2);
 			Assert.AreEqual(DifferenceType.NullReference, differences.Last().DifferenceType);
 			Assert.IsNull(differences.Last().Member);
+		}
+
+		[TestMethod]
+		public void ComparisonTest_WhenElementIsSetToNullForBoth_ShouldReturnWithZeroDifferences()
+		{
+			// Arrange
+			var alternativeTitles = (List<Title>)JohnDoe.AlternativeTitles;
+			var alternativeTitles_2 = (List<Title>)JohnDoe_2.AlternativeTitles;
+
+			alternativeTitles[1] = null;
+			alternativeTitles_2[1] = null;
+
+			// Act
+			var differences = ObjectComparer.Default.DeepCompare(JohnDoe, JohnDoe_2);
+
+			// Assert
+			Assert.AreEqual(0, differences.Count());
 		}
 
 		[TestMethod]
