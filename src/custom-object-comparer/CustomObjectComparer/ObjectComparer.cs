@@ -48,13 +48,7 @@ namespace CustomObjectComparer
 
 				if (objectType != obj2.GetType())
 				{
-					yield return new ObjectDifference
-					(
-						obj1,
-						obj2,
-						DifferenceType.TypeMismatch
-					);
-
+					yield return ObjectDifference.TypeMismatch(obj1, obj2);
 					yield break;
 				}
 
@@ -62,12 +56,7 @@ namespace CustomObjectComparer
 				{
 					if (!obj1.Equals(obj2))
 					{
-						yield return new ObjectDifference
-						(
-							obj1,
-							obj2,
-							DifferenceType.ValueMismatch
-						);
+						yield return ObjectDifference.ValueMismatch(obj1, obj2);
 					}
 
 					yield break;
@@ -90,13 +79,7 @@ namespace CustomObjectComparer
 
 				if (obj1 == null ^ obj2 == null)
 				{
-					yield return new ObjectDifference
-					(
-						obj1,
-						obj2,
-						DifferenceType.NullReference
-					);
-
+					yield return ObjectDifference.NullReference(obj1, obj2);
 					continue;
 				}
 
@@ -104,13 +87,7 @@ namespace CustomObjectComparer
 
 				if (objectType != obj2.GetType())
 				{
-					yield return new ObjectDifference
-					(
-						obj1,
-						obj2,
-						DifferenceType.TypeMismatch
-					);
-
+					yield return ObjectDifference.TypeMismatch(obj1, obj2);
 					continue;
 				}
 
@@ -127,13 +104,7 @@ namespace CustomObjectComparer
 
 						if (e1HasNext != e2HasNext)
 						{
-							yield return new ObjectDifference
-							(
-								obj1,
-								obj2,
-								DifferenceType.EnumerationSizeMismatch
-							);
-
+							yield return ObjectDifference.EnumerationSizeMismatch(obj1, obj2);
 							break;
 						}
 
@@ -149,13 +120,7 @@ namespace CustomObjectComparer
 
 						if (elementType != e2obj.GetType())
 						{
-							yield return new ObjectDifference
-							(
-								e1obj,
-								e2obj,
-								DifferenceType.TypeMismatch
-							);
-
+							yield return ObjectDifference.TypeMismatch(e1obj, e2obj);
 							continue;
 						}
 
@@ -163,12 +128,7 @@ namespace CustomObjectComparer
 						{
 							if (!e1obj.Equals(e2obj))
 							{
-								yield return new ObjectDifference
-								(
-									obj1,
-									obj2,
-									DifferenceType.ElementValueMismatch
-								);
+								yield return ObjectDifference.ElementValueMismatch(obj1, obj2);
 							}
 						}
 						else
@@ -188,14 +148,7 @@ namespace CustomObjectComparer
 
 						if (memberType != val2.GetType())
 						{
-							yield return new ObjectDifference
-							(
-								obj1,
-								obj2,
-								DifferenceType.TypeMismatch,
-								member
-							);
-
+							yield return ObjectDifference.TypeMismatch(obj1, obj2, member);
 							continue;
 						}
 
@@ -203,13 +156,7 @@ namespace CustomObjectComparer
 						{
 							if (!val1.Equals(val2))
 							{
-								yield return new ObjectDifference
-								(
-									obj1,
-									obj2,
-									DifferenceType.ValueMismatch,
-									member
-								);
+								yield return ObjectDifference.ValueMismatch(obj1, obj2, member);
 							}
 						}
 						else

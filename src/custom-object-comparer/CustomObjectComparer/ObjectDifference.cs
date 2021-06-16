@@ -63,5 +63,69 @@ namespace CustomObjectComparer
 			DifferenceType = differenceType;
 			Member = member;
 		}
+
+		#region Static Initializers
+
+		/// <summary>
+		/// Initializes an instance of <see cref="ObjectDifference"/> with <see cref="DifferenceType.NullReference"/>.
+		/// </summary>
+		/// <param name="obj1">First object.</param>
+		/// <param name="obj2">Second object.</param>
+		/// <param name="member">Member which introduces a difference (if applicable - otherwise leave null).</param>
+		/// <returns>The instance.</returns>
+		public static ObjectDifference NullReference(object obj1, object obj2, MemberInfo member = null)
+		{
+			return new ObjectDifference(obj1, obj2, DifferenceType.NullReference, member);
+		}
+
+		/// <summary>
+		/// Initializes an instance of <see cref="ObjectDifference"/> with <see cref="DifferenceType.TypeMismatch"/>.
+		/// </summary>
+		/// <param name="obj1">First object.</param>
+		/// <param name="obj2">Second object.</param>
+		/// <param name="member">Member which introduces a difference (if applicable - otherwise leave null).</param>
+		/// <returns>The instance.</returns>
+		public static ObjectDifference TypeMismatch(object obj1, object obj2, MemberInfo member = null)
+		{
+			return new ObjectDifference(obj1, obj2, DifferenceType.TypeMismatch, member);
+		}
+
+		/// <summary>
+		/// Initializes an instance of <see cref="ObjectDifference"/> with <see cref="DifferenceType.EnumerationSizeMismatch"/>.
+		/// </summary>
+		/// <param name="obj1">First object.</param>
+		/// <param name="obj2">Second object.</param>
+		/// <param name="member">Member which introduces a difference (if applicable - otherwise leave null).</param>
+		/// <returns>The instance.</returns>
+		public static ObjectDifference EnumerationSizeMismatch(object obj1, object obj2, MemberInfo member = null)
+		{
+			return new ObjectDifference(obj1, obj2, DifferenceType.EnumerationSizeMismatch, member);
+		}
+
+		/// <summary>
+		/// Initializes an instance of <see cref="ObjectDifference"/> with <see cref="DifferenceType.ValueMismatch"/>.
+		/// </summary>
+		/// <param name="obj1">First object.</param>
+		/// <param name="obj2">Second object.</param>
+		/// <param name="member">Member which introduces a difference (if applicable - otherwise leave null).</param>
+		/// <returns>The instance.</returns>
+		public static ObjectDifference ValueMismatch(object obj1, object obj2, MemberInfo member = null)
+		{
+			return new ObjectDifference(obj1, obj2, DifferenceType.ValueMismatch, member);
+		}
+
+		/// <summary>
+		/// Initializes an instance of <see cref="ObjectDifference"/> with <see cref="DifferenceType.ElementValueMismatch"/>.
+		/// </summary>
+		/// <param name="obj1">First object.</param>
+		/// <param name="obj2">Second object.</param>
+		/// <param name="member">Member which introduces a difference (if applicable - otherwise leave null).</param>
+		/// <returns>The instance.</returns>
+		public static ObjectDifference ElementValueMismatch(object obj1, object obj2, MemberInfo member = null)
+		{
+			return new ObjectDifference(obj1, obj2, DifferenceType.ElementValueMismatch, member);
+		}
+
+		#endregion
 	}
 }
