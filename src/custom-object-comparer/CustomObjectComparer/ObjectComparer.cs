@@ -111,6 +111,12 @@ namespace CustomObjectComparer
 						object e1obj = e1.Current;
 						object e2obj = e2.Current;
 
+						if (e1obj == null ^ e2obj == null)
+						{
+							yield return ObjectDifference.NullReference(e1obj, e2obj);
+							continue;
+						}
+
 						Type elementType = e1obj.GetType();
 
 						if (elementType != e2obj.GetType())
@@ -138,6 +144,12 @@ namespace CustomObjectComparer
 					{
 						object val1 = obj1.GetMemberValue(member);
 						object val2 = obj2.GetMemberValue(member);
+
+						if (val1 == null ^ val2 == null)
+						{
+							yield return ObjectDifference.NullReference(obj1, obj2, member);
+							continue;
+						}
 
 						Type memberType = val1.GetType();
 

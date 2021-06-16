@@ -340,6 +340,62 @@ namespace CustomObjectComparerTests
 		}
 
 		[TestMethod]
+		public void ComparisonTest_WhenObjectsAreTerminalAndEqual_ShouldReturnWithZeroDifferences()
+		{
+			// Act
+			var differences = ObjectComparer.Default.DeepCompare(17, 17);
+
+			// Assert
+			Assert.AreEqual(0, differences.Count());
+		}
+
+		[TestMethod]
+		public void ComparisonTest_WhenObjectsAreTerminalAndDifferent_ShouldReturnWithValueMismatchDifference()
+		{
+			// Arrange
+			object obj1 = 21;
+			object obj2 = 53;
+
+			// Act
+			var differences = ObjectComparer.Default.DeepCompare(obj1, obj2);
+
+			// Assert
+			Assert.AreEqual(1, differences.Count());
+			Assert.AreEqual(obj1, differences.First().Obj1);
+			Assert.AreEqual(obj2, differences.First().Obj2);
+			Assert.AreEqual(DifferenceType.ValueMismatch, differences.First().DifferenceType);
+			Assert.IsNull(differences.First().Member);
+		}
+
+		[TestMethod]
+		public void ComparisonTest_WhenObjectTypesAreNotEqual_ShouldReturnWithTypeMismatchDifference()
+		{
+			// Arrange
+			object obj1 = 7;
+			object obj2 = 3.14;
+
+			// Act
+			var differences = ObjectComparer.Default.DeepCompare(obj1, obj2);
+
+			// Assert
+			Assert.AreEqual(1, differences.Count());
+			Assert.AreEqual(obj1, differences.First().Obj1);
+			Assert.AreEqual(obj2, differences.First().Obj2);
+			Assert.AreEqual(DifferenceType.TypeMismatch, differences.First().DifferenceType);
+			Assert.IsNull(differences.First().Member);
+		}
+
+		[TestMethod]
+		public void ComparisonTest_WhenObjectReferencesAreEqual_ShouldReturnWithZeroDifferences()
+		{
+			// Act
+			var differences = ObjectComparer.Default.DeepCompare(JohnDoe, JohnDoe);
+
+			// Assert
+			Assert.AreEqual(0, differences.Count());
+		}
+
+		[TestMethod]
 		public void ComparisonTest_WhenObjectsAreSame_ShouldReturnWithZeroDifferences()
 		{
 			// Act
@@ -347,6 +403,57 @@ namespace CustomObjectComparerTests
 
 			// Assert
 			Assert.AreEqual(0, differences.Count());
+		}
+
+		[TestMethod]
+		public void ComparisonTest_WhenOneObjectIsNull_ShouldReturnWithNullReferenceDifference()
+		{
+			// Act
+			var differences = ObjectComparer.Default.DeepCompare(JohnDoe, null);
+
+			// Assert
+			Assert.AreEqual(1, differences.Count());
+			Assert.AreEqual(JohnDoe, differences.First().Obj1);
+			Assert.AreEqual(null, differences.First().Obj2);
+			Assert.AreEqual(DifferenceType.NullReference, differences.First().DifferenceType);
+			Assert.IsNull(differences.First().Member);
+		}
+
+		[TestMethod]
+		public void ComparisonTest_WhenPropertyValueIsSetToNull_ShouldReturnWithNullReferenceDifference()
+		{
+			// Arrange
+			JohnDoe_2.PrimaryTitle = null;
+
+			// Act
+			var differences = ObjectComparer.Default.DeepCompare(JohnDoe, JohnDoe_2);
+
+			// Assert
+			Assert.AreEqual(1, differences.Count());
+			Assert.AreEqual(JohnDoe, differences.First().Obj1);
+			Assert.AreEqual(JohnDoe_2, differences.First().Obj2);
+			Assert.AreEqual(DifferenceType.NullReference, differences.First().DifferenceType);
+			Assert.AreEqual("<PrimaryTitle>k__BackingField", differences.First().Member.Name);
+		}
+
+		[TestMethod]
+		public void ComparisonTest_WhenElementIsSetToNull_ShouldReturnWithNullReferenceDifference()
+		{
+			// Arrange
+			var alternativeTitles = (List<Title>)JohnDoe.AlternativeTitles;
+			var alternativeTitles_2 = (List<Title>)JohnDoe_2.AlternativeTitles;
+
+			alternativeTitles[1] = null;
+
+			// Act
+			var differences = ObjectComparer.Default.DeepCompare(JohnDoe, JohnDoe_2);
+
+			// Assert
+			Assert.AreEqual(1, differences.Count());
+			Assert.AreEqual(alternativeTitles[1], differences.Last().Obj1);
+			Assert.AreEqual(alternativeTitles_2[1], differences.Last().Obj2);
+			Assert.AreEqual(DifferenceType.NullReference, differences.Last().DifferenceType);
+			Assert.IsNull(differences.Last().Member);
 		}
 
 		[TestMethod]
@@ -443,7 +550,45 @@ namespace CustomObjectComparerTests
 		}
 
 		[TestMethod]
-		public void ComparisonTest_WhenDictionaryPrivateFieldIsChanged_ShouldReturnEnumerationSizeMismatch()
+		public void ComparisonTest_WhenArrayPrivateFieldElementValueIsChanged_ShouldReturnWithElementValueMismatchDifference()
+		{
+			// Arrange
+			int[] privateArray_2 = JohnDoe_2.GetPrivateArray();
+			privateArray_2[1] = 778;
+
+			// Act
+			var differences = ObjectComparer.Default.DeepCompare(JohnDoe, JohnDoe_2);
+
+			// Assert
+			Assert.AreEqual(1, differences.Count());
+
+			Assert.AreEqual(JohnDoe.GetPrivateArray(), differences.First().Obj1);
+			Assert.AreEqual(JohnDoe_2.GetPrivateArray(), differences.First().Obj2);
+			Assert.AreEqual(DifferenceType.ElementValueMismatch, differences.First().DifferenceType);
+			Assert.IsNull(differences.First().Member);
+		}
+
+		[TestMethod]
+		public void ComparisonTest_WhenDictionaryPrivateFieldElementValueIsChanged_ShouldReturnWithValueMismatchDifference()
+		{
+			// Arrange
+			Dictionary<int, int> privateDict_2 = JohnDoe_2.GetPrivateDict();
+			privateDict_2[8] = 7;
+
+			// Act
+			var differences = ObjectComparer.Default.DeepCompare(JohnDoe, JohnDoe_2);
+
+			// Assert
+			Assert.AreEqual(1, differences.Count());
+
+			Assert.AreEqual(new KeyValuePair<int, int>(8, JohnDoe.GetPrivateDict()[8]), differences.First().Obj1);
+			Assert.AreEqual(new KeyValuePair<int, int>(8, JohnDoe_2.GetPrivateDict()[8]), differences.First().Obj2);
+			Assert.AreEqual(DifferenceType.ValueMismatch, differences.First().DifferenceType);
+			Assert.AreEqual("value", differences.Last().Member.Name);
+		}
+
+		[TestMethod]
+		public void ComparisonTest_WhenDictionaryPrivateFieldIsChanged_ShouldReturnWithEnumerationSizeMismatch()
 		{
 			// Arrange
 			Dictionary<int, int> privateDict_2 = JohnDoe_2.GetPrivateDict();
@@ -459,6 +604,44 @@ namespace CustomObjectComparerTests
 			Assert.AreEqual(JohnDoe_2.GetPrivateDict(), differences.First().Obj2);
 			Assert.AreEqual(DifferenceType.EnumerationSizeMismatch, differences.First().DifferenceType);
 			Assert.IsNull(differences.First().Member);
+		}
+
+		[TestMethod]
+		public void ComparisonTest_WhenObjectsContainSubtypeMembers_ShouldReturnWithTypeMismatchDifference()
+		{
+			// Arrange
+			JohnDoe.PrimaryTitle = new UserTitle
+			{
+				Name = JohnDoe.PrimaryTitle.Name,
+				Rank = JohnDoe.PrimaryTitle.Rank,
+				Designation = "Addition"
+			};
+
+			var alternativeTitles = (List<Title>)JohnDoe.AlternativeTitles;
+			var alternativeTitles_2 = (List<Title>)JohnDoe_2.AlternativeTitles;
+
+			alternativeTitles[1] = new UserTitle
+			{
+				Name = alternativeTitles[1].Name,
+				Rank = alternativeTitles[1].Rank,
+				Designation = "Addition"
+			};
+
+			// Act
+			var differences = ObjectComparer.Default.DeepCompare(JohnDoe, JohnDoe_2);
+
+			// Assert
+			Assert.AreEqual(2, differences.Count());
+
+			Assert.AreEqual(JohnDoe, differences.First().Obj1);
+			Assert.AreEqual(JohnDoe_2, differences.First().Obj2);
+			Assert.AreEqual(DifferenceType.TypeMismatch, differences.First().DifferenceType);
+			Assert.AreEqual("<PrimaryTitle>k__BackingField", differences.First().Member.Name);
+
+			Assert.AreEqual(alternativeTitles[1], differences.Last().Obj1);
+			Assert.AreEqual(alternativeTitles_2[1], differences.Last().Obj2);
+			Assert.AreEqual(DifferenceType.TypeMismatch, differences.Last().DifferenceType);
+			Assert.IsNull(differences.Last().Member);
 		}
 	}
 }
