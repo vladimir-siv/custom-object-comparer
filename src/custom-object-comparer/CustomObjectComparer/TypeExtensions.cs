@@ -234,4 +234,20 @@ namespace CustomObjectComparer
 			return null;
 		}
 	}
+
+	/// <summary>
+	/// Provides type extension methods.
+	/// </summary>
+	public static class TypeExtensions
+	{
+		/// <summary>
+		/// Checks whether @this type is terminal.
+		/// </summary>
+		/// <param name="this">This type.</param>
+		/// <returns>True if the type is terminal. False otherwise.</returns>
+		public static bool IsTerminal(this Type @this)
+		{
+			return @this.IsPrimitive || @this == typeof(string);
+		}
+	}
 }

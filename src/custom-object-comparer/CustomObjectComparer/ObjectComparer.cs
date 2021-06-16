@@ -52,7 +52,7 @@ namespace CustomObjectComparer
 					yield break;
 				}
 
-				if (objectType.IsPrimitive || objectType == typeof(string))
+				if (objectType.IsTerminal())
 				{
 					if (!obj1.Equals(obj2))
 					{
@@ -124,7 +124,7 @@ namespace CustomObjectComparer
 							continue;
 						}
 
-						if (elementType.IsPrimitive || elementType == typeof(string))
+						if (elementType.IsTerminal())
 						{
 							if (!e1obj.Equals(e2obj))
 							{
@@ -152,7 +152,7 @@ namespace CustomObjectComparer
 							continue;
 						}
 
-						if (memberType.IsPrimitive || memberType == typeof(string))
+						if (memberType.IsTerminal())
 						{
 							if (!val1.Equals(val2))
 							{
