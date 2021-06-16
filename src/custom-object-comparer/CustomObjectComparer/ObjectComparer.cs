@@ -42,25 +42,10 @@ namespace CustomObjectComparer
 			//		b) Value + Reference Types
 			//  2) Enumerables (includes Arrays)
 
-			if (obj1 != null && obj2 != null)
+			if (obj1 == obj2)
 			{
-				Type objectType = obj1.GetType();
-
-				if (objectType != obj2.GetType())
-				{
-					yield return ObjectDifference.TypeMismatch(obj1, obj2);
-					yield break;
-				}
-
-				if (objectType.IsTerminal())
-				{
-					if (!obj1.Equals(obj2))
-					{
-						yield return ObjectDifference.ValueMismatch(obj1, obj2);
-					}
-
-					yield break;
-				}
+				// Only an optimization
+				yield break;
 			}
 
 			var queue = new OneTimeQueue<(object obj1, object obj2)>(64);
@@ -88,6 +73,16 @@ namespace CustomObjectComparer
 				if (objectType != obj2.GetType())
 				{
 					yield return ObjectDifference.TypeMismatch(obj1, obj2);
+					continue;
+				}
+
+				if (objectType.IsTerminal())
+				{
+					if (!obj1.Equals(obj2))
+					{
+						yield return ObjectDifference.ValueMismatch(obj1, obj2);
+					}
+
 					continue;
 				}
 
@@ -130,11 +125,11 @@ namespace CustomObjectComparer
 							{
 								yield return ObjectDifference.ElementValueMismatch(obj1, obj2);
 							}
+
+							continue;
 						}
-						else
-						{
-							queue.Enqueue((e1.Current, e2.Current));
-						}
+
+						queue.Enqueue((e1.Current, e2.Current));
 					}
 				}
 				else
@@ -158,11 +153,11 @@ namespace CustomObjectComparer
 							{
 								yield return ObjectDifference.ValueMismatch(obj1, obj2, member);
 							}
+
+							continue;
 						}
-						else
-						{
-							queue.Enqueue((val1, val2));
-						}
+
+						queue.Enqueue((val1, val2));
 					}
 				}
 			}
